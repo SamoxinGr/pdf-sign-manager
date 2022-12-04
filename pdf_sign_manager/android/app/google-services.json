@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "778435998919",
+    "firebase_url": "https://pdf-sign-manager-3fda9-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "pdf-sign-manager-3fda9",
+    "storage_bucket": "pdf-sign-manager-3fda9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778435998919:android:9f30a76103b5d997ea3ae2",
+        "android_client_info": {
+          "package_name": "com.example.pdf_sign_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "778435998919-t53e09eo1ine32jeq0hbj6gjb70umta2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDndVrD4J4rvjgvYQqO1pzVh6Z9Vg8GUio"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "778435998919-t53e09eo1ine32jeq0hbj6gjb70umta2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
