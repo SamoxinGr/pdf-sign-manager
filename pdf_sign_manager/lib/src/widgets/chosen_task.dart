@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:pdf_sign_manager/src/pages/work_page/cubit/work_page_cubit.dart';
 
-import '../models/UserClass.dart';
+import '../models/TaskClass.dart';
 
-Widget chosenTaskCard(UserClass item, BuildContext context, TaskOpenedLoadedState state) {
+Widget chosenTaskCard(TaskClass item, BuildContext context, TaskOpenedLoadedState state) {
   final double width = MediaQuery.of(context).size.width;
   final double height = MediaQuery.of(context).size.height;
   return Card(
@@ -17,8 +17,17 @@ Widget chosenTaskCard(UserClass item, BuildContext context, TaskOpenedLoadedStat
         borderRadius: BorderRadius.all(Radius.circular(16)),
         color: Color.fromRGBO(254, 233, 225, 1),
       ),
-      height: height/10,
-      child: Center(child: Text("${item.name} - ${item.job}", style: TextStyle(color: Colors.black,),)),
-    ),
-  );
+      //child: Center(child: Text("Описание: ${item.description}", style: TextStyle(color: Colors.black,),)),
+      child: Column(
+        children: [
+          Container(
+              height: height/5,
+              child: Center(child: Text("Описание: ${item.description}", style: TextStyle(color: Colors.black,),))),
+          Container(
+              height: height/5,
+              child: Center(child: Text("От кого: ${item.from}", style: TextStyle(color: Colors.black,),))),
+        ],
+      ),
+      ),
+    );
 }

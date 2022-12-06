@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_horizontal_divider/flutter_horizontal_divider.dart';
 import 'package:pdf_sign_manager/src/pages/work_page/cubit/work_page_cubit.dart';
 
 import '../../widgets/chosen_task.dart';
@@ -24,11 +26,8 @@ class _WorkPage extends StatelessWidget {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     return BlocBuilder<WorkCubit, WorkState>(builder: (context, state) {
-
       if (state is WorkInitial) {
-
         context.read<WorkCubit>().informInitial();
-        print("state is initial");
         context.read<WorkCubit>().loadWork();
         return Scaffold(
           body: Padding(
@@ -37,40 +36,55 @@ class _WorkPage extends StatelessWidget {
               children: [
                 Flexible(
                   flex: 2,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(16)),
-                      color: Color.fromRGBO(146, 170, 131, 0.95),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Here nothing",
-                        style: TextStyle(
-                            color: Color.fromRGBO(254, 233, 225, 1),
-                            fontSize: 24),
+                  child: Column(
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            color: Color.fromRGBO(146, 170, 131, 0.95),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              "Loading",
+                              style: TextStyle(
+                                  color: Color.fromRGBO(254, 233, 225, 1),
+                                  fontSize: 22),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      const HorizontalDivider(thickness: 1, height: 6),
+                      Flexible(
+                        flex: 7,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            color: Color.fromRGBO(146, 170, 131, 0.95),
+                          ),
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-
                 const VerticalDivider(thickness: 1, width: 6),
 
                 Flexible(
+                    flex: 4,
                     child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(16)),
                         color: Color.fromRGBO(146, 170, 131, 0.95),
                       ),
                       child: Center(
-                        child: Text(
-                          "Choose the task",
-                          style: TextStyle(
-                              color: Color.fromRGBO(254, 233, 225, 1),
-                              fontSize: 24),
-                        ),
+                        child: CircularProgressIndicator(),
                       ),
-                    ),
-                    flex: 4),
+                    )),
               ],
             ),
           ),
@@ -87,41 +101,87 @@ class _WorkPage extends StatelessWidget {
               children: [
                 Flexible(
                   flex: 2,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(16)),
-                      color: Color.fromRGBO(146, 170, 131, 0.95),
-                    ),
-                  child: ListView.builder(
-                      padding: EdgeInsets.all(10),
-                      itemCount: state.userList.length,
-                        itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () => context.read<WorkCubit>().openTask(state.userList[index], state.userList),
-                        child: taskCard(state.userList[index], context, state),
-                      );
-                    }),
+                  child: Column(
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            color: Color.fromRGBO(146, 170, 131, 0.95),
+                          ),
+                          child: Center(
+                              child: ListTile(
+                            title: Text(
+                              "${state.currentUser.name}",
+                              style: const TextStyle(
+                                  color: Color.fromRGBO(254, 233, 225, 1),
+                                  fontSize: 22),
+                              textAlign: TextAlign.center,
+                            ),
+                            subtitle: Text(
+                              "${state.currentUser.job}",
+                              style: const TextStyle(
+                                  color: Color.fromRGBO(254, 233, 225, 1),
+                                  fontSize: 18),
+                              textAlign: TextAlign.center,
+                            ),
+                          )),
+                        ),
+                      ),
+                      const HorizontalDivider(thickness: 1, height: 6),
+
+                      Flexible(
+                        flex: 7,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            color: Color.fromRGBO(146, 170, 131, 0.95),
+                          ),
+                          child: state.taskList.isEmpty ?
+                          const Center(
+                            child: Text(
+                              "Empty",
+                              style: TextStyle(
+                                  color: Color.fromRGBO(254, 233, 225, 1),
+                                  fontSize: 22),
+                            ),
+                          )
+                                : ListView.builder(
+                              padding: EdgeInsets.all(10),
+                              itemCount: state.taskList.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () => context
+                                      .read<WorkCubit>()
+                                      .openTask(state.taskList[index],
+                                          state.taskList, state.currentUser),
+                                  child: taskCard(
+                                      state.taskList[index], context, state),
+                                );
+                              }),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-
                 const VerticalDivider(thickness: 1, width: 6),
 
                 Flexible(
+                    flex: 4,
                     child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                        color: Color.fromRGBO(146, 170, 131, 0.95),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Choose the task",
-                          style: TextStyle(
-                              color: Color.fromRGBO(254, 233, 225, 1),
-                              fontSize: 24),
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                          color: Color.fromRGBO(146, 170, 131, 0.95),
                         ),
-                      )
-                    ),
-                    flex: 4),
+                        child: const Center(
+                          child: Text(
+                            "Choose the task",
+                            style: TextStyle(
+                                color: Color.fromRGBO(254, 233, 225, 1),
+                                fontSize: 24),
+                          ),
+                        ))),
               ],
             ),
           ),
@@ -138,26 +198,68 @@ class _WorkPage extends StatelessWidget {
               children: [
                 Flexible(
                   flex: 2,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(16)),
-                      color: Color.fromRGBO(146, 170, 131, 0.95),
-                    ),
-                    child: ListView.builder(
-                        padding: EdgeInsets.all(10),
-                        itemCount: state.list.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () => context.read<WorkCubit>().loadWork(),
-                            child: openedTaskCard(state.list[index], context, state),
-                          );
-                        }),
+                  child: Column(
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            color: Color.fromRGBO(146, 170, 131, 0.95),
+                          ),
+                          child: Center(
+                              child: ListTile(
+                            title: Text(
+                              "${state.currentUser.name}",
+                              style: const TextStyle(
+                                  color: Color.fromRGBO(254, 233, 225, 1),
+                                  fontSize: 22),
+                              textAlign: TextAlign.center,
+                            ),
+                            subtitle: Text(
+                              "${state.currentUser.job}",
+                              style: const TextStyle(
+                                  color: Color.fromRGBO(254, 233, 225, 1),
+                                  fontSize: 18),
+                              textAlign: TextAlign.center,
+                            ),
+                          )),
+                        ),
+                      ),
+                      const HorizontalDivider(thickness: 1, height: 6),
+
+                      Flexible(
+                        flex: 7,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            color: Color.fromRGBO(146, 170, 131, 0.95),
+                          ),
+                          child: ListView.builder(
+                              padding: EdgeInsets.all(10),
+                              itemCount: state.taskList.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () => context
+                                      .read<WorkCubit>()
+                                      .openTask(state.taskList[index],
+                                      state.taskList, state.currentUser),
+                                  child: openedTaskCard(
+                                      state.taskList[index], context, state),
+                                );
+                              }),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+
                 const VerticalDivider(thickness: 1, width: 6),
+
                 Flexible(
+                    flex: 4,
                     child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(16)),
                         color: Color.fromRGBO(146, 170, 131, 0.95),
                       ),
@@ -167,11 +269,11 @@ class _WorkPage extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () => context.read<WorkCubit>().loadWork(),
-                              child: chosenTaskCard(state.user, context, state),
+                              child: chosenTaskCard(
+                                  state.task, context, state),
                             );
                           }),
-                    ),
-                    flex: 4),
+                    )),
               ],
             ),
           ),
@@ -180,8 +282,7 @@ class _WorkPage extends StatelessWidget {
       }
 
       if (state is WorkErrorState) {
-        return const ErrorPage(
-            exPageName: "WorkPage");
+        return ErrorPage(exPageName: "WorkPage");
       } else {
         return Container();
       }

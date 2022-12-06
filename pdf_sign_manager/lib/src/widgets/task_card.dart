@@ -1,11 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:pdf_sign_manager/src/pages/work_page/cubit/work_page_cubit.dart';
 
+import '../models/TaskClass.dart';
 import '../models/UserClass.dart';
 
-Widget taskCard(UserClass item, BuildContext context, WorkLoadedState state ) {
+Widget taskCard(TaskClass item, BuildContext context, WorkLoadedState state ) {
   final double width = MediaQuery.of(context).size.width;
   final double height = MediaQuery.of(context).size.height;
   return Card(
@@ -18,7 +18,7 @@ Widget taskCard(UserClass item, BuildContext context, WorkLoadedState state ) {
         color: Color.fromRGBO(254, 233, 225, 1),
       ),
       height: height/10,
-      child: Center(child: Text("${item.name}", style: TextStyle(color: Colors.black),)),
+      child: Center(child: Text("Customer: ${item.customer}", style: TextStyle(color: Colors.black),)),
     ),
   );
 }

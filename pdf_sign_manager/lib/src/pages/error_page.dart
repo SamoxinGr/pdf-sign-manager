@@ -1,10 +1,11 @@
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'root_page/root_page.dart';
 
 // ignore: must_be_immutable
 class ErrorPage extends StatelessWidget {
   final String exPageName;
-  const ErrorPage({Key? key, required this.exPageName}) : super(key: key);
+  ErrorPage({Key? key, required this.exPageName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +49,19 @@ class ErrorPage extends StatelessWidget {
     );
   }
 
+  final mfaAction = AuthStateChangeAction<MFARequired>(
+        (context, state) async {
+      final nav = Navigator.of(context);
+
+      await startMFAVerification(
+        resolver: state.resolver,
+        context: context,
+      );
+
+      nav.pushReplacementNamed('/profile');
+    },
+  );
+
   toPreviousPage(context) {
     if (exPageName == "WorkPage") {
       Navigator.pushReplacement(context,
@@ -59,14 +73,12 @@ class ErrorPage extends StatelessWidget {
     }
     if (exPageName == "WatchListPage") {
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => RootPage(pageIndex: 2)));
+          MaterialPageRoute(builder: (context) => RootPage(pageIndex: 0)));
     } else {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => RootPage(
-                pageIndex: 0,
-              )));
+              builder: (context) => RootPage(pageIndex: 0)));
     }
   }
 }

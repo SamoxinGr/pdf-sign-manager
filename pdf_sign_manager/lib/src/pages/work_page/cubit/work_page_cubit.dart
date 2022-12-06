@@ -1,13 +1,12 @@
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:pdf_sign_manager/src/models/TaskClass.dart';
 
 import '../../../models/UserClass.dart';
 import 'package:pdf_sign_manager/src/utils/database_service.dart';
-
-import '../../../utils/database_service.dart';
 
 part 'work_page_state.dart';
 
@@ -17,18 +16,22 @@ class WorkCubit extends Cubit<WorkState> {
 
   Future<void> informInitial() async {
     if (kDebugMode) {
-      print("Work page is loading");
+      print("state is initial");
     }
   }
 
   Future<void> loadWork() async {
-    List<String> test_list = ["1", "2", "3", "4", "5"];
     DatabaseService service = DatabaseService();
-    List<UserClass> userList = await service.retrieveData('team');
-    //print(userList[0].name);
+    List<UserClass> userList = await service.retrieveUserData('team');
+
+    String? userEmail = FirebaseAuth.instance.currentUser?.email;
+    UserClass currentUser = await service.getUser(userEmail, "team");  //получили авторизованного пользователя
+
+    List<TaskClass> taskList = await service.retrieveTaskData("task", currentUser.job);
+
     try {
       print("Work is loaded");
-      emit(WorkLoadedState(userList));
+      emit(WorkLoadedState(currentUser, userList, taskList));
     } catch (e){
       if (isClosed == false) {
         emit(WorkErrorState());
@@ -36,10 +39,10 @@ class WorkCubit extends Cubit<WorkState> {
     }
   }
 
-  Future<void> openTask(UserClass user, List<UserClass> list) async {
+  Future<void> openTask(TaskClass task, List<TaskClass> taskList, UserClass currentUser) async {
     try {
       print("Task opened");
-      emit(TaskOpenedLoadedState(user, list));
+      emit(TaskOpenedLoadedState(task, taskList, currentUser));
     } catch (e){
       if (isClosed == false) {
         emit(WorkErrorState());

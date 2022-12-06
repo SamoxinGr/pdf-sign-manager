@@ -5,18 +5,22 @@ part of 'work_page_cubit.dart';
 abstract class WorkState {}
 
 class WorkInitial extends WorkState {
+
 }
 
 class WorkLoadedState extends WorkState {
+  UserClass currentUser;
   List<UserClass> userList;
   //Iterable<dynamic> specialists;
-  WorkLoadedState(this.userList);
+  List<TaskClass> taskList;
+  WorkLoadedState(this.currentUser, this.userList, this.taskList);
 }
 
 class TaskOpenedLoadedState extends WorkState {
-  UserClass user;
-  List<UserClass> list;  //userList
-  TaskOpenedLoadedState(this.user, this.list);
+  TaskClass task;
+  List<TaskClass> taskList;
+  UserClass currentUser;//userList
+  TaskOpenedLoadedState(this.task, this.taskList, this.currentUser);
 }
 
 class WorkErrorState extends WorkState {
