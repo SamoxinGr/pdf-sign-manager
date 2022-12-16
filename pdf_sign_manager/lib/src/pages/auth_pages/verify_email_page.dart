@@ -76,9 +76,11 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   Widget build(BuildContext context) => isEmailVerified
       ? RootPage(pageIndex: 0)
       : Scaffold(
+    backgroundColor: Color.fromRGBO(146, 170, 131, 1),
     resizeToAvoidBottomInset: false,
     appBar: AppBar(
-      title: const Text('Верификация Email адреса'),
+      backgroundColor: Color.fromRGBO(72, 57, 42, 1),
+      title: const Text('Верификация Email адреса', style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),),
     ),
     body: SafeArea(
       child: Padding(
@@ -90,6 +92,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               'Письмо с подтверждением было отправлено на вашу электронную почту.',
               style: TextStyle(
                 fontSize: 20,
+                color: Color.fromRGBO(254, 233, 225, 1),
               ),
               textAlign: TextAlign.center,
             ),
@@ -97,7 +100,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
             ElevatedButton.icon(
               onPressed: canResendEmail ? sendVerificationEmail : null,
               icon: const Icon(Icons.email),
-              label: const Text('Повторно отправить'),
+              label: const Text('Повторно отправить', style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),),
             ),
             const SizedBox(height: 20),
             TextButton(
@@ -108,7 +111,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               child: const Text(
                 'Отменить',
                 style: TextStyle(
-                  color: Colors.blue,
+                    color: Color.fromRGBO(254, 233, 225, 1)
                 ),
               ),
             )

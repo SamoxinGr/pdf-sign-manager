@@ -8,11 +8,11 @@ import 'package:pdf_sign_manager/src/models/TaskClass.dart';
 import '../../../models/UserClass.dart';
 import 'package:pdf_sign_manager/src/utils/database_service.dart';
 
-part 'work_page_state.dart';
+part 'second_page_state.dart';
 
-class WorkCubit extends Cubit<WorkState> {
+class SecondCubit extends Cubit<SecondState> {
 
-  WorkCubit() : super(WorkInitial());
+  SecondCubit() : super(SecondInitial());
 
   Future<void> informInitial() async {
     if (kDebugMode) {
@@ -20,21 +20,21 @@ class WorkCubit extends Cubit<WorkState> {
     }
   }
 
-  Future<void> loadWork() async {
+  Future<void> loadSecond() async {
     DatabaseService service = DatabaseService();
     List<UserClass> userList = await service.retrieveUserData('team');
 
     String? userEmail = FirebaseAuth.instance.currentUser?.email;
     UserClass currentUser = await service.getUser(userEmail, "team");  //получили авторизованного пользователя
 
-    List<TaskClass> taskList = await service.retrieveTaskData("task", currentUser.job, "in progress");
+    List<TaskClass> taskList = await service.retrieveDoneTaskData("task", currentUser.job, "in progress");
 
     try {
-      print("Work is loaded");
-      emit(WorkLoadedState(currentUser, userList, taskList));
+      print("Second loadSecond is loaded");
+      emit(SecondLoadedState(currentUser, userList, taskList));
     } catch (e){
       if (isClosed == false) {
-        emit(WorkErrorState());
+        emit(SecondErrorState());
       }
     }
   }
@@ -45,15 +45,26 @@ class WorkCubit extends Cubit<WorkState> {
       emit(TaskOpenedLoadedState(task, taskList, currentUser));
     } catch (e){
       if (isClosed == false) {
-        emit(WorkErrorState());
+        emit(SecondErrorState());
       }
     }
   }
 
-  Future<void> reloadWork() async {
+  Future<void> createTask(List<TaskClass> taskList, UserClass currentUser) async {
+    try {
+      print("Task creating");
+      emit(TaskCreateLoadedState(taskList, currentUser));
+    } catch (e){
+      if (isClosed == false) {
+        emit(SecondErrorState());
+      }
+    }
+  }
+
+  Future<void> reloadSecond() async {
     if (isClosed == false) {
       print("haha");
-      emit(WorkInitial());
+      emit(SecondInitial());
     }
   }
 }

@@ -65,7 +65,7 @@ class _WorkPage extends StatelessWidget {
                             color: Color.fromRGBO(146, 170, 131, 0.95),
                           ),
                           child: Center(
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(color: Color.fromRGBO(254, 233, 225, 1)),
                           ),
                         ),
                       ),
@@ -82,7 +82,7 @@ class _WorkPage extends StatelessWidget {
                         color: Color.fromRGBO(146, 170, 131, 0.95),
                       ),
                       child: Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(color: Color.fromRGBO(254, 233, 225, 1)),
                       ),
                     )),
               ],
@@ -147,19 +147,22 @@ class _WorkPage extends StatelessWidget {
                                   fontSize: 22),
                             ),
                           )
-                                : ListView.builder(
+                                : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ListView.builder(
                               padding: EdgeInsets.all(10),
                               itemCount: state.taskList.length,
                               itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () => context
-                                      .read<WorkCubit>()
-                                      .openTask(state.taskList[index],
-                                          state.taskList, state.currentUser),
-                                  child: taskCard(
-                                      state.taskList[index], context, state),
-                                );
+                                  return InkWell(
+                                    onTap: () => context
+                                        .read<WorkCubit>()
+                                        .openTask(state.taskList[index],
+                                            state.taskList, state.currentUser),
+                                    child: taskCard(
+                                        state.taskList[index], context, state),
+                                  );
                               }),
+                                ),
                         ),
                       ),
                     ],
@@ -235,19 +238,22 @@ class _WorkPage extends StatelessWidget {
                             borderRadius: BorderRadius.all(Radius.circular(16)),
                             color: Color.fromRGBO(146, 170, 131, 0.95),
                           ),
-                          child: ListView.builder(
-                              padding: EdgeInsets.all(10),
-                              itemCount: state.taskList.length,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () => context
-                                      .read<WorkCubit>()
-                                      .openTask(state.taskList[index],
-                                      state.taskList, state.currentUser),
-                                  child: openedTaskCard(
-                                      state.taskList[index], context, state),
-                                );
-                              }),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListView.builder(
+                                padding: EdgeInsets.all(10),
+                                itemCount: state.taskList.length,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: () => context
+                                        .read<WorkCubit>()
+                                        .openTask(state.taskList[index],
+                                        state.taskList, state.currentUser),
+                                    child: openedTaskCard(
+                                        state.taskList[index], context, state),
+                                  );
+                                }),
+                          ),
                         ),
                       ),
                     ],

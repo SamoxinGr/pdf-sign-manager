@@ -58,15 +58,40 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
     scaffoldMassager.showSnackBar(snackBar);
 
-    navigator.pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+    navigator.pushNamedAndRemoveUntil(
+        '/login', (Route<dynamic> route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Color.fromRGBO(146, 170, 131, 1),
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Сброс пароля'),
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            IconButton(
+              onPressed: () => Navigator.of(context).pushNamed('/'),
+              icon: Icon(
+                Icons.arrow_back_rounded,
+                color: Color.fromRGBO(254, 233, 225, 1),
+              ),
+              // Your widgets here
+            ),
+            Container(width: width/150,),
+            Text(
+              'Сброс пароля',
+              style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
+            ),
+          ],
+        ),
+        //leading: Icon(Icons.arrow_back_rounded, color: Color.fromRGBO(254, 233, 225, 1),),
+        backgroundColor: Color.fromRGBO(72, 57, 42, 1),
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
@@ -75,22 +100,40 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           child: Column(
             children: [
               TextFormField(
+                style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
                 keyboardType: TextInputType.emailAddress,
                 autocorrect: false,
                 controller: emailTextInputController,
                 validator: (email) =>
-                email != null && !EmailValidator.validate(email)
-                    ? 'Введите правильный Email'
-                    : null,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                    email != null && !EmailValidator.validate(email)
+                        ? 'Введите правильный Email'
+                        : null,
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
                   hintText: 'Введите Email',
+                  hintStyle: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
                 ),
               ),
               const SizedBox(height: 30),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromRGBO(72, 57, 42, 1),
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25))),
                 onPressed: resetPassword,
-                child: const Center(child: Text('Сбросить пароль')),
+                child: const Center(
+                    child: Text(
+                  'Сбросить пароль',
+                  style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
+                )),
               ),
             ],
           ),

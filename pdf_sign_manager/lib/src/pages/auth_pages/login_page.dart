@@ -16,8 +16,6 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordTextInputController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  get mail => null;
-
   @override
   void dispose() {
     emailTextInputController.dispose();
@@ -64,15 +62,22 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
 
-    navigator.pushNamedAndRemoveUntil('/account', (Route<dynamic> route) => false);
+    navigator.pushNamedAndRemoveUntil(
+        '/account', (Route<dynamic> route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(146, 170, 131, 1),
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Войти'),
+        automaticallyImplyLeading: false,
+        backgroundColor: Color.fromRGBO(72, 57, 42, 1),
+        title: const Text(
+          'Войти',
+          style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
@@ -81,20 +86,31 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             children: [
               TextFormField(
+                style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
                 keyboardType: TextInputType.emailAddress,
                 autocorrect: false,
                 controller: emailTextInputController,
                 validator: (email) =>
-                email != null && !EmailValidator.validate(email)
-                    ? 'Введите правильный Email'
-                    : null,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Введите Email',
-                ),
+                    email != null && !EmailValidator.validate(email)
+                        ? 'Введите правильный Email'
+                        : null,
+                decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide(
+                            color: Color.fromRGBO(254, 233, 225, 1))),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide(
+                            color: Color.fromRGBO(254, 233, 225, 1))),
+                    //border: OutlineInputBorder(),
+                    hintText: 'Введите Email',
+                    hintStyle:
+                        TextStyle(color: Color.fromRGBO(254, 233, 225, 1))),
               ),
               const SizedBox(height: 30),
               TextFormField(
+                style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
                 autocorrect: false,
                 controller: passwordTextInputController,
                 obscureText: isHiddenPassword,
@@ -103,8 +119,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     : null,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
                   hintText: 'Введите пароль',
+                  hintStyle: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
                   suffix: InkWell(
                     onTap: togglePasswordView,
                     child: Icon(
@@ -118,8 +142,17 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 30),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromRGBO(72, 57, 42, 1),
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
                 onPressed: login,
-                child: const Center(child: Text('Войти')),
+                child: const Center(
+                  child: Text(
+                    'Войти',
+                    style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
+                  ),
+                ),
               ),
               const SizedBox(height: 30),
               TextButton(
@@ -128,13 +161,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   'Регистрация',
                   style: TextStyle(
                     decoration: TextDecoration.underline,
+                    color: Color.fromRGBO(254, 233, 225, 1),
                   ),
                 ),
               ),
               TextButton(
                 onPressed: () =>
                     Navigator.of(context).pushNamed('/reset_password'),
-                child: const Text('Сбросить пароль'),
+                child: const Text(
+                  'Сбросить пароль',
+                  style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
+                ),
               ),
             ],
           ),

@@ -3,6 +3,7 @@ import 'package:firebase_ui_auth/src/actions.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf_sign_manager/main.dart';
 import '../auth_pages/login_page.dart';
+import '../second_page/second_page.dart';
 import '../work_page/work_page.dart';
 
 class RootPage extends StatefulWidget {
@@ -25,7 +26,7 @@ class _RootPageState extends State<RootPage> {
 
   List<Widget> pageList = <Widget>[
     const WorkPage(),
-    const WorkPage(),
+    const SecondPage(),
     LoginScreen()
   ];
 
@@ -59,7 +60,7 @@ class _RootPageState extends State<RootPage> {
                     color: Color.fromRGBO(254, 233, 225, 1),
                   ),
                   label: Text(
-                    'First',
+                    'Main',
                     style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
                   ),
                 ),
@@ -73,7 +74,7 @@ class _RootPageState extends State<RootPage> {
                     color: Color.fromRGBO(254, 233, 225, 1),
                   ),
                   label: Text(
-                    'Second',
+                    'Task',
                     style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
                   ),
                 ),

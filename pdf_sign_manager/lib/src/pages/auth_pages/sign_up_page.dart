@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../utils/database_service.dart';
 import '../../utils/snack_bar.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -16,6 +17,8 @@ class _SignUpScreen extends State<SignUpScreen> {
   TextEditingController passwordTextInputController = TextEditingController();
   TextEditingController passwordTextRepeatInputController =
   TextEditingController();
+  TextEditingController jobTextInputController = TextEditingController();
+  TextEditingController fullNameInputController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -23,6 +26,8 @@ class _SignUpScreen extends State<SignUpScreen> {
     emailTextInputController.dispose();
     passwordTextInputController.dispose();
     passwordTextRepeatInputController.dispose();
+    jobTextInputController.dispose();
+    fullNameInputController.dispose();
 
     super.dispose();
   }
@@ -54,6 +59,9 @@ class _SignUpScreen extends State<SignUpScreen> {
         email: emailTextInputController.text.trim(),
         password: passwordTextInputController.text.trim(),
       );
+      DatabaseService service = DatabaseService(); //addUser to DB
+      await service.addUser("team", emailTextInputController.text.trim(), jobTextInputController.text.trim(), fullNameInputController.text.trim());
+
     } on FirebaseAuthException catch (e) {
       print(e.code);
 
@@ -79,9 +87,12 @@ class _SignUpScreen extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(146, 170, 131, 1),
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Зарегистрироваться'),
+        automaticallyImplyLeading: false,
+        backgroundColor: Color.fromRGBO(72, 57, 42, 1),
+        title: const Text('Зарегистрироваться', style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
@@ -90,6 +101,7 @@ class _SignUpScreen extends State<SignUpScreen> {
           child: Column(
             children: [
               TextFormField(
+                style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
                 keyboardType: TextInputType.emailAddress,
                 autocorrect: false,
                 controller: emailTextInputController,
@@ -97,13 +109,22 @@ class _SignUpScreen extends State<SignUpScreen> {
                 email != null && !EmailValidator.validate(email)
                     ? 'Введите правильный Email'
                     : null,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                      BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                      BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
                   hintText: 'Введите Email',
+                  hintStyle: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
                 ),
               ),
               const SizedBox(height: 30),
               TextFormField(
+                style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
                 autocorrect: false,
                 controller: passwordTextInputController,
                 obscureText: isHiddenPassword,
@@ -112,8 +133,16 @@ class _SignUpScreen extends State<SignUpScreen> {
                     ? 'Минимум 6 символов'
                     : null,
                 decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                      BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                      BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
                   hintText: 'Введите пароль',
+                  hintStyle: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
                   suffix: InkWell(
                     onTap: togglePasswordView,
                     child: Icon(
@@ -127,6 +156,7 @@ class _SignUpScreen extends State<SignUpScreen> {
               ),
               const SizedBox(height: 30),
               TextFormField(
+                style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
                 autocorrect: false,
                 controller: passwordTextRepeatInputController,
                 obscureText: isHiddenPassword,
@@ -135,8 +165,16 @@ class _SignUpScreen extends State<SignUpScreen> {
                     ? 'Минимум 6 символов'
                     : null,
                 decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                      BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                      BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
                   hintText: 'Введите пароль еще раз',
+                  hintStyle: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
                   suffix: InkWell(
                     onTap: togglePasswordView,
                     child: Icon(
@@ -149,9 +187,57 @@ class _SignUpScreen extends State<SignUpScreen> {
                 ),
               ),
               const SizedBox(height: 30),
+              TextFormField(
+                style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
+                keyboardType: TextInputType.text,
+                autocorrect: false,
+                controller: fullNameInputController,
+                validator: (value) => value != null && value.length < 6
+                    ? 'Минимум 6 символов'
+                    : null,
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                      BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                      BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
+                  hintText: 'Введите фамилию и имя',
+                  hintStyle: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
+                ),
+              ),
+              const SizedBox(height: 30),
+              TextFormField(
+                style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
+                keyboardType: TextInputType.text,
+                autocorrect: false,
+                controller: jobTextInputController,
+                validator: (value) => value != null && value.length < 2
+                    ? 'Минимум 2 символа'
+                    : null,
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                      BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide:
+                      BorderSide(color: Color.fromRGBO(254, 233, 225, 1))),
+                  hintText: 'Введите должность',
+                  hintStyle: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),
+                ),
+              ),
+              const SizedBox(height: 30),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromRGBO(72, 57, 42, 1),
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
                 onPressed: signUp,
-                child: const Center(child: Text('Регистрация')),
+                child: const Center(child: Text('Регистрация', style: TextStyle(color: Color.fromRGBO(254, 233, 225, 1)),),),
               ),
               const SizedBox(height: 30),
               TextButton(
@@ -160,6 +246,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                   'Войти',
                   style: TextStyle(
                     decoration: TextDecoration.underline,
+                    color: Color.fromRGBO(254, 233, 225, 1)
                   ),
                 ),
               ),
