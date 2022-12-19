@@ -440,26 +440,23 @@ class _SecondPage extends StatelessWidget {
                             children: [
                               Flexible(
                                 flex: 4,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ListView.builder(
-                                      padding: EdgeInsets.all(10),
-                                      itemCount: state.taskList.length,
-                                      itemBuilder: (context, index) {
-                                        return InkWell(
-                                          onTap: () => context
-                                              .read<SecondCubit>()
-                                              .openTask(
-                                                  state.taskList[index],
-                                                  state.taskList,
-                                                  state.currentUser),
-                                          child: createLeftTaskSecCard(
-                                              state.taskList[index],
-                                              context,
-                                              state),
-                                        );
-                                      }),
-                                ),
+                                child: ListView.builder(
+                                    padding: EdgeInsets.all(10),
+                                    itemCount: state.taskList.length,
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                        onTap: () => context
+                                            .read<SecondCubit>()
+                                            .openTask(
+                                                state.taskList[index],
+                                                state.taskList,
+                                                state.currentUser),
+                                        child: createLeftTaskSecCard(
+                                            state.taskList[index],
+                                            context,
+                                            state),
+                                      );
+                                    }),
                               ),
                               Flexible(
                                   flex: 1,

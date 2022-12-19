@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,7 +53,20 @@ Widget chosenTaskCard(
                     children: [
                       Expanded(
                           child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          FilePickerResult? result = await FilePicker.platform.pickFiles();
+                          Uint8List? fileBytes = result?.files.first.bytes;
+                          await service.uploadFile(result);
+                          await service.updateTask(
+                              "task",
+                              item.id,
+                              item.customer,
+                              item.description,
+                              item.from,
+                              "in progress",
+                              item.to,
+                              result?.files.first.name,);
+                        },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color.fromRGBO(72, 57, 42, 1),
                             elevation: 8,
@@ -76,7 +92,8 @@ Widget chosenTaskCard(
                                 item.description,
                                 item.from,
                                 "cancelled",
-                                item.to);
+                                item.to,
+                                item.filename);
                             context.read<WorkCubit>().loadWork();
                           } else {
                             //другой человек не сможет отменить задачу
@@ -108,7 +125,8 @@ Widget chosenTaskCard(
                                 item.description,
                                 item.from,
                                 "done",
-                                item.to);
+                                item.to,
+                                item.filename,);
                             context.read<WorkCubit>().loadWork();
                           } else {
                             //передаем человеку выше
@@ -119,7 +137,8 @@ Widget chosenTaskCard(
                                 item.description,
                                 item.to,
                                 "in progress",
-                                item.from);
+                                item.from,
+                                item.filename,);
                             context.read<WorkCubit>().loadWork();
                           }
                         },
@@ -138,7 +157,9 @@ Widget chosenTaskCard(
                     children: [
                       Expanded(
                           child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await service.downloadFile(item.filename);
+                        },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color.fromRGBO(72, 57, 42, 1),
                             elevation: 8,
@@ -165,7 +186,8 @@ Widget chosenTaskCard(
                                     item.description,
                                     item.to,
                                     "in progress",
-                                    item.from);
+                                    item.from,
+                                    "None",);
                                 context.read<WorkCubit>().loadWork();
                               },
                               style: ElevatedButton.styleFrom(
@@ -181,7 +203,21 @@ Widget chosenTaskCard(
                             ))
                           : Expanded(
                               child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                FilePickerResult? result = await FilePicker.platform.pickFiles();
+                                await service.uploadFile(result);
+                                await service.updateTask(
+                                    "task",
+                                    item.id,
+                                    item.customer,
+                                    item.description,
+                                    item.from,
+                                    "in progress",
+                                    item.to,
+                                    result?.files.first.name,);
+                                await context.read<WorkCubit>().informInitial();
+                                await context.read<WorkCubit>().loadWork();
+                                },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor:
                                       const Color.fromRGBO(72, 57, 42, 1),
@@ -208,7 +244,8 @@ Widget chosenTaskCard(
                                 item.description,
                                 item.from,
                                 "cancelled",
-                                item.to);
+                                item.to,
+                                item.filename);
                             context.read<WorkCubit>().loadWork();
                           } else {
                             //другой человек не сможет отменить задачу
@@ -240,7 +277,8 @@ Widget chosenTaskCard(
                                 item.description,
                                 item.from,
                                 "done",
-                                item.to);
+                                item.to,
+                                item.filename);
                             context.read<WorkCubit>().loadWork();
                           } else {
                             //передаем человеку выше
@@ -251,7 +289,8 @@ Widget chosenTaskCard(
                                 item.description,
                                 item.to,
                                 "in progress",
-                                item.from);
+                                item.from,
+                                item.filename);
                             context.read<WorkCubit>().loadWork();
                           }
                         },

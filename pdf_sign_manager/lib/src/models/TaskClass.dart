@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskClass {
@@ -7,6 +9,7 @@ class TaskClass {
   final String? from;
   final String? status;
   final String? to;
+  final String? filename;
 
 
   TaskClass({
@@ -16,6 +19,7 @@ class TaskClass {
     this.from,
     this.status,
     this.to,
+    this.filename,
   });
 
   TaskClass.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
@@ -24,8 +28,8 @@ class TaskClass {
         description = doc.data()!["description"],
         from = doc.data()!["from"],
         status = doc.data()!["status"],
-        to = doc.data()!["to"];
-  //regions: data?['regions'] is Iterable ? List.from(data?['regions']) : null,
+        to = doc.data()!["to"],
+        filename = doc.data()!["filename"];
 
   Map<String, dynamic> toFirestore() {
     return {
@@ -33,7 +37,8 @@ class TaskClass {
       if (description != null) "description": description,
       if (from != null) "from": from,
       if (status != null) "status": status,
-      if (to != null) "to": to
+      if (to != null) "to": to,
+      if (filename != null) "filename": filename,
     };
   }
 
@@ -43,7 +48,8 @@ class TaskClass {
       'description': description,
       'from': from,
       'status': status,
-      'to': to
+      'to': to,
+      'filename': filename,
       //'address': address.toMap(),
     };
   }
