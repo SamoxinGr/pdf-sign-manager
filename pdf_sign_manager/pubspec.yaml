@@ -38,7 +38,6 @@ dependencies:
   fluttericon: ^2.0.0
   flutter_icons: ^1.1.0
   cupertino_icons: ^1.0.2
-
   firebase_core: ^2.3.0
   firebase_auth: ^4.1.4
   cloud_firestore: ^4.1.0
